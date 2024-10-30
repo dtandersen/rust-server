@@ -19,7 +19,7 @@ exit_handler()
 	# Stop the web server
 	pkill -f nginx
 
-	echo "Exiting.."
+	echo "Abnormal exit..."
 	exit
 }
 
@@ -311,5 +311,5 @@ wait "$child"
 
 pkill -f nginx
 
-echo "Exiting.."
+echo "Normal exit..."
 exit

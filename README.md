@@ -88,3 +88,5 @@ More information on the Rust+ companion app integration can be found [here](http
 # Anything else
 
 If you need help, have questions or bug submissions, feel free to contact me **@Dids** on Twitter, and on the *Rust Server Owners* Slack community.
+
+https://wiki.facepunch.com/rust/Creating-a-server
