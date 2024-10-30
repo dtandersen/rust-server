@@ -118,8 +118,8 @@ ENV RUST_SERVER_STARTUP_ARGUMENTS="-batchmode -load -nographics +server.secure 1
     RUST_RCON_SECURE_WEBSOCKET="0" \
     RUST_SERVER_WORLDSIZE="3500" \
     RUST_SERVER_MAXPLAYERS="500" \
-    RUST_SERVER_SAVE_INTERVAL="600"
-    CHOWN_DIRS "/app,/steamcmd,/usr/share/nginx/html,/var/log/nginx"
+    RUST_SERVER_SAVE_INTERVAL="600" \
+    CHOWN_DIRS="/app,/steamcmd,/usr/share/nginx/html,/var/log/nginx"
 
 # Expose the volumes
 # VOLUME [ "/steamcmd/rust" ]
