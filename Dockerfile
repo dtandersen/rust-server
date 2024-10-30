@@ -82,11 +82,19 @@ RUN chown -R 1000:1000 \
     /var/log/nginx
 
 # Run as a non-root user by default
-ENV PGID 1000
-ENV PUID 1000
+ENV PGID=1000 \
+    PUID=1000
 
-# Expose necessary ports
-EXPOSE 8080 28015 28016 28082
+# server port
+EXPOSE 28015/udp 
+# rcon port
+EXPOSE 28016/tcp
+# query port
+EXPOSE 28017/udp
+# rust+
+EXPOSE 28082/tcp
+# rcon web interface
+EXPOSE 8080/tcp  
 
 # Setup default environment variables for the server
 ENV RUST_SERVER_STARTUP_ARGUMENTS="-batchmode -load -nographics +server.secure 1" \

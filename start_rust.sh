@@ -209,41 +209,41 @@ if [ ! -z ${RUST_RCON_WEB+x} ]; then
 fi
 
 # Disable logrotate if "-logfile" is set in $RUST_STARTUP_COMMAND
-LOGROTATE_ENABLED=1
-RUST_STARTUP_COMMAND_LOWERCASE=`echo "$RUST_STARTUP_COMMAND" | sed 's/./\L&/g'`
-if [[ $RUST_STARTUP_COMMAND_LOWERCASE == *" -logfile "* ]]; then
-	LOGROTATE_ENABLED=0
-fi
+# LOGROTATE_ENABLED=1
+# RUST_STARTUP_COMMAND_LOWERCASE=`echo "$RUST_STARTUP_COMMAND" | sed 's/./\L&/g'`
+# if [[ $RUST_STARTUP_COMMAND_LOWERCASE == *" -logfile "* ]]; then
+# 	LOGROTATE_ENABLED=0
+# fi
 
-if [ "$LOGROTATE_ENABLED" = "1" ]; then
-	echo "Log rotation enabled!"
+# if [ "$LOGROTATE_ENABLED" = "1" ]; then
+# 	echo "Log rotation enabled!"
 
-	# Log to stdout by default
-	RUST_STARTUP_COMMAND="$RUST_STARTUP_COMMAND -logfile /dev/stdout"
-	echo "Using startup arguments: $RUST_SERVER_STARTUP_ARGUMENTS"
+# 	# Log to stdout by default
+# 	RUST_STARTUP_COMMAND="$RUST_STARTUP_COMMAND -logfile /dev/stdout"
+# 	echo "Using startup arguments: $RUST_SERVER_STARTUP_ARGUMENTS"
 
-	# Create the logging directory structure
-	if [ ! -d "/steamcmd/rust/logs/archive" ]; then
-		mkdir -p /steamcmd/rust/logs/archive
-	fi
+# 	# Create the logging directory structure
+# 	if [ ! -d "/steamcmd/rust/logs/archive" ]; then
+# 		mkdir -p /steamcmd/rust/logs/archive
+# 	fi
 
-	# Set the logfile filename/path
-	DATE=`date '+%Y-%m-%d_%H-%M-%S'`
-	RUST_SERVER_LOG_FILE="/steamcmd/rust/logs/$RUST_SERVER_IDENTITY"_"$DATE.txt"
+# 	# Set the logfile filename/path
+# 	DATE=`date '+%Y-%m-%d_%H-%M-%S'`
+# 	RUST_SERVER_LOG_FILE="/steamcmd/rust/logs/$RUST_SERVER_IDENTITY"_"$DATE.txt"
 
-	# Archive old logs
-	echo "Cleaning up old logs.."
-	mv /steamcmd/rust/logs/*.txt /steamcmd/rust/logs/archive | true
-else
-	echo "Log rotation disabled!"
-fi
+# 	# Archive old logs
+# 	echo "Cleaning up old logs.."
+# 	mv /steamcmd/rust/logs/*.txt /steamcmd/rust/logs/archive | true
+# else
+# 	echo "Log rotation disabled!"
+# fi
 
 # Disable logging to stdout/stderr if "-logfile /dev/" is used
-STDLOG_ENABLED=1
-if [[ $RUST_STARTUP_COMMAND_LOWERCASE == *" -logfile /dev/"* ]]; then
-	echo "Disabling internal stdout/stderr logging!"
-	STDLOG_ENABLED=0
-fi
+# STDLOG_ENABLED=1
+# if [[ $RUST_STARTUP_COMMAND_LOWERCASE == *" -logfile /dev/"* ]]; then
+# 	echo "Disabling internal stdout/stderr logging!"
+# 	STDLOG_ENABLED=0
+# fi
 
 # Start the scheduler (only if update checking is enabled)
 if [ "$RUST_UPDATE_CHECKING" = "1" ]; then
@@ -298,13 +298,13 @@ if [ "$RUST_CARBON_ENABLED" = "1" ]; then
 	source "/steamcmd/rust/carbon/tools/environment.sh"
 fi
 
-if [ "$LOGROTATE_ENABLED" = "1" ]; then
-	unbuffer /steamcmd/rust/RustDedicated $RUST_STARTUP_COMMAND "${ARGUMENTS[@]}" 2>&1 | grep --line-buffered -Ev '^\s*$|Filename' | tee $RUST_SERVER_LOG_FILE &
-elif [ "$STDLOG_ENABLED" = "1" ]; then
-	/steamcmd/rust/RustDedicated $RUST_STARTUP_COMMAND "${ARGUMENTS[@]}" 2>&1 &
-else
-	/steamcmd/rust/RustDedicated $RUST_STARTUP_COMMAND "${ARGUMENTS[@]}" &
-fi
+# if [ "$LOGROTATE_ENABLED" = "1" ]; then
+# 	unbuffer /steamcmd/rust/RustDedicated $RUST_STARTUP_COMMAND "${ARGUMENTS[@]}" 2>&1 | grep --line-buffered -Ev '^\s*$|Filename' | tee $RUST_SERVER_LOG_FILE &
+# elif [ "$STDLOG_ENABLED" = "1" ]; then
+# 	/steamcmd/rust/RustDedicated $RUST_STARTUP_COMMAND "${ARGUMENTS[@]}" 2>&1 &
+# else
+/steamcmd/rust/RustDedicated $RUST_STARTUP_COMMAND "${ARGUMENTS[@]}" &
+# fi
 
 child=$!
 wait "$child"
