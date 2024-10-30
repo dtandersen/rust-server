@@ -40,7 +40,8 @@ RUN npm install
 # Setup restart support (for update automation)
 ADD restart_app/ /app/restart_app/
 WORKDIR /app/restart_app
-RUN npm install
+# disabled - doesn't install
+#RUN npm install
 
 # Setup scheduling support
 ADD scheduler_app/ /app/scheduler_app/
