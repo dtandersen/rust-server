@@ -1,18 +1,23 @@
-FROM didstopia/base:nodejs-12-steamcmd-ubuntu-18.04
+# FROM didstopia/base:nodejs-12-steamcmd-ubuntu-18.04
+FROM steamcmd/steamcmd:latest
 
-LABEL maintainer="Didstopia <support@didstopia.com>"
+LABEL maintainer="https://github.com/dtandersen/rust-server"
 
 # Fix apt-get warnings
-ARG DEBIAN_FRONTEND=noninteractive
+# ARG DEBIAN_FRONTEND=noninteractive
 
 # Install dependencies
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        nginx \
-        expect \
-        tcl \
-	libsdl2-2.0-0:i386 \
-        libgdiplus && \
+    apt-get install -y \
+# apt-get install -y --no-install-recommends \
+    nginx \
+    # expect \
+    # tcl \
+    unzip \
+    libarchive-tools \
+    curl && \
+	# libsdl2-2.0-0:i386 \
+    # libgdiplus && \
     rm -rf /var/lib/apt/lists/*
 
 # Remove default nginx stuff
@@ -32,32 +37,32 @@ ADD fix_conn.sh /tmp/fix_conn.sh
 # Create the volume directories
 RUN mkdir -p /steamcmd/rust /usr/share/nginx/html /var/log/nginx
 
-# Setup proper shutdown support
-ADD shutdown_app/ /app/shutdown_app/
-WORKDIR /app/shutdown_app
-RUN npm install
+# # Setup proper shutdown support
+# ADD shutdown_app/ /app/shutdown_app/
+# WORKDIR /app/shutdown_app
+# RUN npm install
 
-# Setup restart support (for update automation)
-ADD restart_app/ /app/restart_app/
-WORKDIR /app/restart_app
-# disabled - doesn't install
-#RUN npm install
+# # Setup restart support (for update automation)
+# ADD restart_app/ /app/restart_app/
+# WORKDIR /app/restart_app
+# # disabled - doesn't install
+# #RUN npm install
 
-# Setup scheduling support
-ADD scheduler_app/ /app/scheduler_app/
-WORKDIR /app/scheduler_app
-RUN npm install
+# # Setup scheduling support
+# ADD scheduler_app/ /app/scheduler_app/
+# WORKDIR /app/scheduler_app
+# RUN npm install
 
-# Setup scheduling support
-ADD heartbeat_app/ /app/heartbeat_app/
-WORKDIR /app/heartbeat_app
-RUN npm install
+# # Setup scheduling support
+# ADD heartbeat_app/ /app/heartbeat_app/
+# WORKDIR /app/heartbeat_app
+# RUN npm install
 
 # Setup rcon command relay app
-ADD rcon_app/ /app/rcon_app/
-WORKDIR /app/rcon_app
-RUN npm install
-RUN ln -s /app/rcon_app/app.js /usr/bin/rcon
+# ADD rcon_app/ /app/rcon_app/
+# WORKDIR /app/rcon_app
+# RUN npm install
+# RUN ln -s /app/rcon_app/app.js /usr/bin/rcon
 
 # Add the steamcmd installation script
 ADD install.txt /app/install.txt
