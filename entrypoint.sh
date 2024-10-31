@@ -303,6 +303,7 @@ add_argument_pair ARGUMENTS "+server.description" "RUST_SERVER_DESCRIPTION"
 add_argument_pair ARGUMENTS "+server.maxplayers" "RUST_SERVER_MAXPLAYERS"
 add_argument_pair ARGUMENTS "+server.saveinterval" "RUST_SERVER_SAVE_INTERVAL"
 add_argument_pair ARGUMENTS "+app.port" "RUST_APP_PORT"
+RUST_STARTUP_COMMAND=$RUST_STARTUP_COMMAND +rcon.web 1
 
 if [ "$RUST_CARBON_ENABLED" = "1" ]; then
 	source "/steamcmd/rust/carbon/tools/environment.sh"
