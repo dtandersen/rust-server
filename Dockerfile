@@ -150,5 +150,5 @@ ENV RUST_SERVER_STARTUP_ARGUMENTS="-batchmode -load -nographics +server.secure 1
 # VOLUME [ "/steamcmd/rust" ]
 
 # Start the server
-ENTRYPOINT [ "/tini", "--" ]
+ENTRYPOINT [ "tini", "--" ]
 CMD ["/entrypoint.sh"]
