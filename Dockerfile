@@ -28,6 +28,7 @@ RUN rm -fr /usr/share/nginx/html/* && \
 
 # COPY rcon.yaml /etc
 COPY rcon /usr/local/bin
+COPY healthz /usr/local/bin
 RUN mkdir -p /opt/rcon && \
     curl -sL https://github.com/gorcon/rcon-cli/releases/download/v0.10.3/rcon-0.10.3-i386_linux.tar.gz | tar -zxvf- --strip-components=1 -C /opt/rcon
 

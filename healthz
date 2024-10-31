@@ -1,0 +1,2 @@
+#!/bin/env bash
+rcon echo OK | grep OK
