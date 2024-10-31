@@ -31,7 +31,7 @@ COPY rcon /usr/local/bin
 RUN mkdir -p /opt/rcon && \
     curl -sL https://github.com/gorcon/rcon-cli/releases/download/v0.10.3/rcon-0.10.3-i386_linux.tar.gz | tar -zxvf- --strip-components=1 -C /opt/rcon
 
-ENV PATH=$PATH:/opt/rcon
+# ENV PATH=$PATH:/opt/rcon
 #  && \
     # 	mv /tmp/webrcon-24b0898d86706723d52bb4db8559d90f7c9e069b/* /usr/share/nginx/html/ && \
     # 	rm -fr /tmp/webrcon-24b0898d86706723d52bb4db8559d90f7c9e069b
