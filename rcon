@@ -1,0 +1,2 @@
+#!/bin/env bash
+/opt/rcon/rcon -c /opt/rcon/rcon.yaml $@

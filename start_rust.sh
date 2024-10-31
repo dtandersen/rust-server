@@ -12,14 +12,14 @@ exit_handler()
 	echo "Shutdown signal received"
 
 	# Execute the RCON shutdown command
-	node /app/shutdown_app/app.js
-	killer=$!
-	wait "$killer"
+	# node /app/shutdown_app/app.js
+	# killer=$!
+	# wait "$killer"
 
 	# Stop the web server
 	pkill -f nginx
 
-	echo "Abnormal exit..."
+	# echo "Abnormal exit..."
 	exit
 }
 
@@ -30,18 +30,18 @@ trap 'exit_handler' SIGINT SIGTERM
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/steamcmd/rust/RustDedicated_Data/Plugins/x86_64
 
 # Define the install/update function
-install_or_update()
-{
-	# Install Rust from install.txt
-	echo "Installing or updating Rust.. (this might take a while, be patient)"
-	bash /steamcmd/steamcmd.sh +runscript /app/install.txt
+# install_or_update()
+# {
+# 	# Install Rust from install.txt
+# 	echo "Installing or updating Rust.. (this might take a while, be patient)"
+# 	steamcmd +runscript /app/install.txt
 
-	# Terminate if exit code wasn't zero
-	if [ $? -ne 0 ]; then
-		echo "Exiting, steamcmd install or update failed!"
-		exit 1
-	fi
-}
+# 	# Terminate if exit code wasn't zero
+# 	if [ $? -ne 0 ]; then
+# 		echo "Exiting, steamcmd install or update failed!"
+# 		exit 1
+# 	fi
+# }
 
 # Remove old lock files (used by restart_app/ and update_check.sh)
 rm -fr /tmp/*.lock
@@ -56,46 +56,56 @@ if [ ! -d "/steamcmd/rust/server/${RUST_SERVER_IDENTITY}" ]; then
 	mkdir -p "/steamcmd/rust/server/${RUST_SERVER_IDENTITY}"
 fi
 
+cat << EOF > /opt/rcon/rcon.yaml
+default:
+  address: "localhost:$RUST_RCON_PORT"
+  password: "$RUST_RCON_PASSWORD"
+  log: "rcon-default.log"
+  type: "web"
+  timeout: "10s"
+EOF
+
 # Install/update steamcmd
-echo "Installing/updating steamcmd.."
-curl -s http://media.steampowered.com/installer/steamcmd_linux.tar.gz | bsdtar -xvf- -C /steamcmd
-
+# echo "Installing/updating steamcmd.."
+# curl -s http://media.steampowered.com/installer/steamcmd_linux.tar.gz | bsdtar -xvf- -C /steamcmd
+echo hi
+steamcmd +force_install_dir /steamcmd/rust +login anonymous +app_update 258550 validate +quit
 # Check which branch to use
-if [ ! -z ${RUST_BRANCH+x} ]; then
-	echo "Using branch arguments: $RUST_BRANCH"
+# if [ ! -z ${RUST_BRANCH+x} ]; then
+# 	echo "Using branch arguments: $RUST_BRANCH"
 
-	# Add "-beta" if necessary
-	INSTALL_BRANCH="${RUST_BRANCH}"
-	if [ ! "$RUST_BRANCH" == "public" ]; then
-	    INSTALL_BRANCH="-beta ${RUST_BRANCH}"
-	fi
-	sed -i "s/app_update 258550.*validate/app_update 258550 $INSTALL_BRANCH validate/g" /app/install.txt
-else
-	sed -i "s/app_update 258550.*validate/app_update 258550 validate/g" /app/install.txt
-fi
+# 	# Add "-beta" if necessary
+# 	INSTALL_BRANCH="${RUST_BRANCH}"
+# 	if [ ! "$RUST_BRANCH" == "public" ]; then
+# 	    INSTALL_BRANCH="-beta ${RUST_BRANCH}"
+# 	fi
+# 	sed -i "s/app_update 258550.*validate/app_update 258550 $INSTALL_BRANCH validate/g" /app/install.txt
+# else
+# 	sed -i "s/app_update 258550.*validate/app_update 258550 validate/g" /app/install.txt
+# fi
 
-# Disable auto-update if start mode is 2
-if [ "$RUST_START_MODE" = "2" ]; then
-	# Check that Rust exists in the first place
-	if [ ! -f "/steamcmd/rust/RustDedicated" ]; then
-		install_or_update
-	else
-		echo "Rust seems to be installed, skipping automatic update.."
-	fi
-else
-	install_or_update
+# # Disable auto-update if start mode is 2
+# if [ "$RUST_START_MODE" = "2" ]; then
+# 	# Check that Rust exists in the first place
+# 	if [ ! -f "/steamcmd/rust/RustDedicated" ]; then
+# 		install_or_update
+# 	else
+# 		echo "Rust seems to be installed, skipping automatic update.."
+# 	fi
+# else
+# 	install_or_update
 
-	# Run the update check if it's not been run before
-	if [ ! -f "/steamcmd/rust/build.id" ]; then
-		./app/update_check.sh
-	else
-		OLD_BUILDID="$(cat /steamcmd/rust/build.id)"
-		STRING_SIZE=${#OLD_BUILDID}
-		if [ "$STRING_SIZE" -lt "6" ]; then
-			./app/update_check.sh
-		fi
-	fi
-fi
+# 	# Run the update check if it's not been run before
+# 	if [ ! -f "/steamcmd/rust/build.id" ]; then
+# 		./app/update_check.sh
+# 	else
+# 		OLD_BUILDID="$(cat /steamcmd/rust/build.id)"
+# 		STRING_SIZE=${#OLD_BUILDID}
+# 		if [ "$STRING_SIZE" -lt "6" ]; then
+# 			./app/update_check.sh
+# 		fi
+# 	fi
+# fi
 
 # Ensure only Oxide or Carbon is selected, not both.
 if [ "$RUST_OXIDE_ENABLED" = "1" ] && [ "$RUST_CARBON_ENABLED" = "1" ]; then

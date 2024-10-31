@@ -25,14 +25,25 @@ RUN rm -fr /usr/share/nginx/html/* && \
 	rm -fr /etc/nginx/sites-available/* && \
 	rm -fr /etc/nginx/sites-enabled/*
 
+# COPY rcon.yaml /etc
+COPY rcon /usr/local/bin
+RUN mkdir -p /opt/rcon && \
+    curl -sL https://github.com/gorcon/rcon-cli/releases/download/v0.10.3/rcon-0.10.3-i386_linux.tar.gz | tar -zxvf- --strip-components=1 -C /opt/rcon
+
+ENV PATH=$PATH:/opt/rcon
+#  && \
+    # 	mv /tmp/webrcon-24b0898d86706723d52bb4db8559d90f7c9e069b/* /usr/share/nginx/html/ && \
+    # 	rm -fr /tmp/webrcon-24b0898d86706723d52bb4db8559d90f7c9e069b
+    
+
 # Install webrcon (specific commit)
-COPY nginx_rcon.conf /etc/nginx/nginx.conf
-RUN curl -sL https://github.com/Facepunch/webrcon/archive/24b0898d86706723d52bb4db8559d90f7c9e069b.zip | bsdtar -xvf- -C /tmp && \
-	mv /tmp/webrcon-24b0898d86706723d52bb4db8559d90f7c9e069b/* /usr/share/nginx/html/ && \
-	rm -fr /tmp/webrcon-24b0898d86706723d52bb4db8559d90f7c9e069b
+# COPY nginx_rcon.conf /etc/nginx/nginx.conf
+# RUN curl -sL https://github.com/Facepunch/webrcon/archive/24b0898d86706723d52bb4db8559d90f7c9e069b.zip | bsdtar -xvf- -C /tmp && \
+# 	mv /tmp/webrcon-24b0898d86706723d52bb4db8559d90f7c9e069b/* /usr/share/nginx/html/ && \
+# 	rm -fr /tmp/webrcon-24b0898d86706723d52bb4db8559d90f7c9e069b
 
 # Customize the webrcon package to fit our needs
-ADD fix_conn.sh /tmp/fix_conn.sh
+# ADD fix_conn.sh /tmp/fix_conn.sh
 
 # Create the volume directories
 RUN mkdir -p /steamcmd/rust /usr/share/nginx/html /var/log/nginx
@@ -136,4 +147,5 @@ ENV RUST_SERVER_STARTUP_ARGUMENTS="-batchmode -load -nographics +server.secure 1
 # VOLUME [ "/steamcmd/rust" ]
 
 # Start the server
-CMD [ "bash", "/app/start.sh"]
+ENTRYPOINT [ "/bin/bash" ]
+CMD ["/app/start.sh"]
