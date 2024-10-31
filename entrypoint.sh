@@ -6,6 +6,11 @@
 # Print the user we're currently running as
 echo "Running as user: $(whoami)"
 
+if [ -z "$RUST_RCON_PASSWORD" ]; then
+	echo Please set RUST_RCON_PASSWORD.
+	exit
+fi
+
 # Define the exit handler
 exit_handler()
 {
