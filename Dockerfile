@@ -13,6 +13,7 @@ RUN apt-get update && \
     nginx \
     # expect \
     # tcl \
+    tini \
     unzip \
     libarchive-tools \
     curl && \
@@ -76,16 +77,16 @@ RUN mkdir -p /steamcmd/rust /usr/share/nginx/html /var/log/nginx
 # RUN ln -s /app/rcon_app/app.js /usr/bin/rcon
 
 # Add the steamcmd installation script
-ADD install.txt /app/install.txt
+# ADD install.txt /app/install.txt
 
 # Copy the Rust startup script
-ADD start_rust.sh /app/start.sh
+COPY entrypoint.sh /
 
 # Copy the Rust update check script
-ADD update_check.sh /app/update_check.sh
+# ADD update_check.sh /app/update_check.sh
 
 # Copy extra files
-COPY README.md LICENSE.md /app/
+# COPY README.md LICENSE.md /app/
 
 # Set the current working directory
 WORKDIR /
@@ -93,9 +94,11 @@ WORKDIR /
 # Fix permissions
 RUN chown -R 1000:1000 \
     /steamcmd \
-    /app \
+    # /app \
     /usr/share/nginx/html \
     /var/log/nginx
+
+WORKDIR /steamcmd/rust
 
 # Run as a non-root user by default
 ENV PGID=1000 \
@@ -147,5 +150,5 @@ ENV RUST_SERVER_STARTUP_ARGUMENTS="-batchmode -load -nographics +server.secure 1
 # VOLUME [ "/steamcmd/rust" ]
 
 # Start the server
-ENTRYPOINT [ "/bin/bash" ]
-CMD ["/app/start.sh"]
+ENTRYPOINT [ "/tini", "--" ]
+CMD ["/entrypoint.sh"]
