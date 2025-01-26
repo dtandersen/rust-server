@@ -95,3 +95,5 @@ If you need help, have questions or bug submissions, feel free to contact me **@
 * https://wiki.facepunch.com/rust/Creating-a-server
 * https://github.com/gorcon/rcon-cli
 * https://developer.valvesoftware.com/wiki/SteamCMD
+* https://facepunch.github.io/webrcon/#/home
+* https://api.steamcmd.net/v1/info/258550

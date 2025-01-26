@@ -1,0 +1,6 @@
+default:
+  address: "localhost:$RUST_RCON_PORT"
+  password: "$RUST_RCON_PASSWORD"
+#  log: "rcon-default.log"
+  type: "web" # rcon, telnet, web.
+  timeout: "10s"
