@@ -88,3 +88,12 @@ More information on the Rust+ companion app integration can be found [here](http
 # Anything else
 
 If you need help, have questions or bug submissions, feel free to contact me **@Dids** on Twitter, and on the *Rust Server Owners* Slack community.
+
+# References
+
+* https://github.com/Didstopia/rust-server
+* https://wiki.facepunch.com/rust/Creating-a-server
+* https://github.com/gorcon/rcon-cli
+* https://developer.valvesoftware.com/wiki/SteamCMD
+* https://facepunch.github.io/webrcon/#/home
+* https://api.steamcmd.net/v1/info/258550
